@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import DashboardLayout from './components/layout/DashboardLayout';
 
 // Pages
+import LandingPage         from './pages/public/LandingPage';
 import Login               from './pages/auth/Login';
 import QRCheckIn           from './pages/public/QRCheckIn';
 import ReceptionistDashboard from './pages/receptionist/ReceptionistDashboard';
@@ -20,19 +21,20 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* ─── Public routes ─── */}
+          <Route path="/"          element={<LandingPage />} />
           <Route path="/login"     element={<Login />} />
           <Route path="/check-in"  element={<QRCheckIn />} />
 
           {/* ─── Receptionist routes (sidebar layout) ─── */}
           <Route
-            path="/"
+            path="/app"
             element={
               <ProtectedRoute>
                 <DashboardLayout />
               </ProtectedRoute>
             }
           >
-            <Route index element={<Navigate to="/dashboard" replace />} />
+            <Route index element={<Navigate to="/app/dashboard" replace />} />
             <Route path="dashboard"    element={<ReceptionistDashboard />} />
             <Route path="queue"        element={<QueueManagement />} />
             <Route path="walk-in"      element={<WalkInRegistration />} />
@@ -45,7 +47,7 @@ function App() {
           </Route>
 
           {/* ─── Catch-all ─── */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
