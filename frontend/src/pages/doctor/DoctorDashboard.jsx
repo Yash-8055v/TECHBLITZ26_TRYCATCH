@@ -34,7 +34,7 @@ const DoctorDashboard = () => {
           <p className="text-slate-500 mt-0.5">{dateStr}</p>
         </div>
         <div className="flex gap-3">
-          <Link to="/prescriptions"
+          <Link to="/app/prescriptions"
             className="bg-primary hover:bg-primary-dark text-white font-semibold py-2.5 px-6 rounded-lg transition-all flex items-center gap-2 shadow-sm">
             <span className="material-symbols-outlined text-lg">medication</span>
             New Prescription
@@ -57,11 +57,11 @@ const DoctorDashboard = () => {
             </div>
           </div>
           <div className="flex gap-3">
-            <Link to="/prescriptions"
+            <Link to="/app/prescriptions"
               className="bg-white text-primary font-bold px-5 py-2.5 rounded-lg hover:bg-primary/10 transition-all">
               Prescribe
             </Link>
-            <Link to="/patients"
+            <Link to="/app/patients"
               className="bg-white/20 text-white font-bold px-5 py-2.5 rounded-lg hover:bg-white/30 transition-all">
               View Record
             </Link>
@@ -99,7 +99,7 @@ const DoctorDashboard = () => {
             <span className="material-symbols-outlined text-primary">queue</span>
             Today's Queue
           </h3>
-          <Link to="/queue" className="text-primary text-sm font-semibold hover:underline flex items-center gap-1">
+          <Link to="/app/queue" className="text-primary text-sm font-semibold hover:underline flex items-center gap-1">
             Manage <span className="material-symbols-outlined text-sm">chevron_right</span>
           </Link>
         </div>
@@ -127,7 +127,7 @@ const DoctorDashboard = () => {
                 }`}>
                   {item.status === QUEUE_STATUS.IN_PROGRESS ? 'With Doctor' : `Queue #${idx + 1}`}
                 </span>
-                <Link to="/prescriptions"
+                <Link to="/app/prescriptions"
                   className="text-primary text-sm font-bold hover:underline">
                   Prescribe
                 </Link>

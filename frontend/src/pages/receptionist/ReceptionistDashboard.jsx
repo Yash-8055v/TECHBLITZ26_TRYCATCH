@@ -57,14 +57,14 @@ const ReceptionistDashboard = () => {
         </div>
         <div className="flex gap-4">
           <Link
-            to="/walk-in"
+            to="/app/walk-in"
             className="bg-primary hover:bg-primary-dark text-white font-semibold py-2.5 px-6 rounded-lg transition-all flex items-center gap-2 shadow-sm"
           >
             <span className="material-symbols-outlined text-lg">person_add</span>
             Add Walk-in
           </Link>
           <Link
-            to="/appointments"
+            to="/app/appointments"
             className="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold py-2.5 px-6 rounded-lg transition-all flex items-center gap-2 shadow-sm"
           >
             <span className="material-symbols-outlined text-lg">event</span>
@@ -121,7 +121,7 @@ const ReceptionistDashboard = () => {
           <div className="px-6 py-16 text-center">
             <span className="material-symbols-outlined text-slate-300 text-5xl">group_off</span>
             <p className="text-slate-400 mt-3 font-medium">No patients in queue right now</p>
-            <Link to="/walk-in" className="inline-flex items-center gap-2 mt-4 text-primary text-sm font-semibold hover:underline">
+            <Link to="/app/walk-in" className="inline-flex items-center gap-2 mt-4 text-primary text-sm font-semibold hover:underline">
               <span className="material-symbols-outlined text-sm">add</span>
               Add a walk-in patient
             </Link>
@@ -159,7 +159,7 @@ const ReceptionistDashboard = () => {
                     </td>
                     <td className="px-6 py-4 text-right space-x-2">
                       <Link
-                        to="/queue"
+                        to="/app/queue"
                         className="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-primary-dark transition-all"
                       >
                         View Queue
@@ -174,7 +174,7 @@ const ReceptionistDashboard = () => {
 
         <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-between items-center">
           <p className="text-xs text-slate-500">Showing {queue.length} patient{queue.length !== 1 ? 's' : ''} in queue</p>
-          <Link to="/queue" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+          <Link to="/app/queue" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
             Manage Queue <span className="material-symbols-outlined text-sm">chevron_right</span>
           </Link>
         </div>

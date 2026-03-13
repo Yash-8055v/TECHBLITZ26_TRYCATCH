@@ -3,17 +3,17 @@ import { useAuth } from '../../context/AuthContext';
 
 const navItems = {
   receptionist: [
-    { to: '/dashboard',     icon: 'dashboard',      label: 'Dashboard' },
-    { to: '/queue',         icon: 'group',           label: 'Queue Management' },
-    { to: '/walk-in',       icon: 'person_add',      label: 'Walk-in Registration' },
-    { to: '/appointments',  icon: 'calendar_month',  label: 'Appointments' },
-    { to: '/patients',      icon: 'folder_shared',   label: 'Patients' },
+    { to: '/app/dashboard',    icon: 'dashboard',      label: 'Dashboard' },
+    { to: '/app/queue',        icon: 'group',           label: 'Queue Management' },
+    { to: '/app/walk-in',      icon: 'person_add',      label: 'Walk-in Registration' },
+    { to: '/app/appointments', icon: 'calendar_month',  label: 'Appointments' },
+    { to: '/app/patients',     icon: 'folder_shared',   label: 'Patients' },
   ],
   doctor: [
-    { to: '/doctor',         icon: 'dashboard',      label: 'Dashboard' },
-    { to: '/queue',          icon: 'group',           label: 'Queue' },
-    { to: '/patients',       icon: 'folder_shared',   label: 'Patient Records' },
-    { to: '/prescriptions',  icon: 'medication',      label: 'Prescriptions' },
+    { to: '/app/doctor',        icon: 'dashboard',      label: 'Dashboard' },
+    { to: '/app/queue',         icon: 'group',           label: 'Queue' },
+    { to: '/app/patients',      icon: 'folder_shared',   label: 'Patient Records' },
+    { to: '/app/prescriptions', icon: 'medication',      label: 'Prescriptions' },
   ],
 };
 

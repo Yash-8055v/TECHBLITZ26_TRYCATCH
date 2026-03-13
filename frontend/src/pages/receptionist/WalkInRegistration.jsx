@@ -81,7 +81,7 @@ const WalkInRegistration = () => {
           </div>
           <p className="text-slate-500 text-sm italic">Patient will receive SMS notification when it's their turn.</p>
           <button
-            onClick={() => navigate('/queue')}
+            onClick={() => navigate('/app/queue')}
             className="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-primary-dark transition-all"
           >
             View Queue
@@ -102,7 +102,7 @@ const WalkInRegistration = () => {
           <h2 className="text-slate-900 text-xl font-bold leading-tight tracking-tight">Walk-in Registration</h2>
         </div>
         <button
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate('/app/dashboard')}
           className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-primary transition-colors"
         >
           <span className="material-symbols-outlined text-[20px]">arrow_back</span>

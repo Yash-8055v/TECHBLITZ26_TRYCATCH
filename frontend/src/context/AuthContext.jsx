@@ -41,8 +41,11 @@ export const AuthProvider = ({ children }) => {
 
     // Real Firebase listener
     let unsubFirebase;
+    // Safety net: if Firebase never calls back (misconfigured), stop loading after 5s
+    const safetyTimeout = setTimeout(() => setLoading(false), 5000);
     try {
       unsubFirebase = onAuthStateChanged(auth, async (fbUser) => {
+        clearTimeout(safetyTimeout);
         if (fbUser) {
           setUser(fbUser);
           try {
@@ -57,9 +60,10 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       });
     } catch {
+      clearTimeout(safetyTimeout);
       setLoading(false);
     }
-    return () => unsubFirebase?.();
+    return () => { unsubFirebase?.(); clearTimeout(safetyTimeout); };
   }, []);
 
   const login = async (email, password) => {
