@@ -26,7 +26,7 @@ const Login = () => {
       // Route based on role from demo profile or Firestore
       const role = result?.profile?.role || result?.user?.role;
       setTimeout(() => {
-        navigate(role === 'doctor' ? '/doctor' : '/dashboard');
+        navigate(role === 'doctor' ? '/app/doctor' : '/app/dashboard');
       }, 300);
     } catch (err) {
       const msgs = {
