@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, addDoc, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore';
-import { db } from '../../config/firebase';
-import { QUEUE_STATUS, PATIENT_TYPE, COMMON_SYMPTOMS } from '../../config/constants';
+import { COMMON_SYMPTOMS } from '../../config/constants';
+import { addWalkIn } from '../../services/queueService';
 import { triggerWebhook } from '../../services/webhookService';
 
 const WalkInRegistration = () => {
@@ -21,30 +20,14 @@ const WalkInRegistration = () => {
     }));
   };
 
-  const getNextToken = async () => {
-    const q = query(collection(db, 'queue'), orderBy('token', 'desc'), limit(1));
-    const snap = await getDocs(q);
-    return snap.empty ? 1 : snap.docs[0].data().token + 1;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name.trim() || !form.phone.trim()) return;
     setLoading(true);
     setError('');
     try {
-      const newToken = await getNextToken();
-      await addDoc(collection(db, 'queue'), {
-        name:      form.name.trim(),
-        phone:     form.phone.trim(),
-        symptoms:  form.symptoms.trim(),
-        type:      PATIENT_TYPE.WALK_IN,
-        token:     newToken,
-        status:    QUEUE_STATUS.WAITING,
-        createdAt: serverTimestamp(),
-      });
+      const { token: newToken } = await addWalkIn(form);
       setToken(newToken);
-      // Trigger n8n webhook
       await triggerWebhook('patient.created', {
         name:  form.name.trim(),
         phone: form.phone.trim(),

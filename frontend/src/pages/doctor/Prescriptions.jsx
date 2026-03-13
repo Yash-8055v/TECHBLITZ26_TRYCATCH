@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../../config/firebase';
+import { useAuth } from '../../context/AuthContext';
+import { savePrescription } from '../../services/prescriptionService';
 import { triggerWebhook } from '../../services/webhookService';
 
 const QUICK_TEMPLATES = [
@@ -10,6 +10,7 @@ const QUICK_TEMPLATES = [
 ];
 
 const Prescriptions = () => {
+  const { userProfile } = useAuth();
   const [diagnosis,    setDiagnosis]    = useState('');
   const [instructions, setInstructions] = useState('');
   const [isUrgent,     setIsUrgent]     = useState(false);
@@ -34,15 +35,16 @@ const Prescriptions = () => {
     if (!diagnosis.trim() || !patientName.trim()) { setError('Please fill in patient name and diagnosis.'); return; }
     setLoading(true); setError('');
     try {
-      await addDoc(collection(db, 'prescriptions'), {
-        patientName: patientName.trim(),
-        diagnosis:   diagnosis.trim(),
-        medications: meds.filter(m => m.name.trim()),
+      await savePrescription({
+        patientName:  patientName.trim(),
+        diagnosis:    diagnosis.trim(),
+        medications:  meds.filter(m => m.name.trim()),
         instructions,
         isUrgent,
         followUp,
-        createdAt:   serverTimestamp(),
-        refNo:       `RX-${Date.now()}`,
+        doctorId:     userProfile?.id || 'unknown',
+        doctorName:   userProfile?.name || 'Doctor',
+        refNo:        `RX-${Date.now()}`,
       });
       await triggerWebhook('prescription.created', { patientName, diagnosis });
       setSuccess(true);

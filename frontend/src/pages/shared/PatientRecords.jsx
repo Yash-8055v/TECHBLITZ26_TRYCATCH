@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { db } from '../../config/firebase';
 import { Link } from 'react-router-dom';
+import { subscribePatients } from '../../services/patientService';
 
 const PatientRecords = () => {
   const [patients, setPatients] = useState([]);
@@ -9,9 +8,8 @@ const PatientRecords = () => {
   const [loading,  setLoading]  = useState(true);
 
   useEffect(() => {
-    const q = query(collection(db, 'patients'), orderBy('name', 'asc'));
-    return onSnapshot(q, snap => {
-      setPatients(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    return subscribePatients((data) => {
+      setPatients(data);
       setLoading(false);
     });
   }, []);

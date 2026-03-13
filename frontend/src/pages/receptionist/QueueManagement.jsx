@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../config/firebase';
 import { QUEUE_STATUS, PATIENT_TYPE } from '../../config/constants';
+import { subscribeQueue, updateQueueStatus, callNextPatient } from '../../services/queueService';
 
 const statusColors = {
   [QUEUE_STATUS.IN_PROGRESS]: 'bg-blue-100 text-blue-700 border-blue-200',
@@ -21,13 +20,8 @@ const QueueManagement = () => {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    const q = query(collection(db, 'queue'), orderBy('token', 'asc'));
-    return onSnapshot(q, snap => setQueue(snap.docs.map(d => ({ id: d.id, ...d.data() }))));
+    return subscribeQueue((data) => setQueue(data));
   }, []);
-
-  const updateStatus = async (id, status) => {
-    await updateDoc(doc(db, 'queue', id), { status });
-  };
 
   const tabs = ['All', QUEUE_STATUS.WAITING, QUEUE_STATUS.IN_PROGRESS, QUEUE_STATUS.COMPLETED, QUEUE_STATUS.SKIPPED];
 
@@ -41,13 +35,7 @@ const QueueManagement = () => {
   const inProgress  = queue.filter(q => q.status === QUEUE_STATUS.IN_PROGRESS).length;
   const completed   = queue.filter(q => q.status === QUEUE_STATUS.COMPLETED).length;
 
-  const callNext = async () => {
-    const nextWaiting = queue.find(q => q.status === QUEUE_STATUS.WAITING);
-    if (!nextWaiting) return;
-    const current = queue.find(q => q.status === QUEUE_STATUS.IN_PROGRESS);
-    if (current) await updateStatus(current.id, QUEUE_STATUS.COMPLETED);
-    await updateStatus(nextWaiting.id, QUEUE_STATUS.IN_PROGRESS);
-  };
+  const callNext = () => callNextPatient(queue);
 
   const currentPatient = queue.find(q => q.status === QUEUE_STATUS.IN_PROGRESS);
 
@@ -182,13 +170,13 @@ const QueueManagement = () => {
                     {item.status === QUEUE_STATUS.WAITING && (
                       <>
                         <button
-                          onClick={() => updateStatus(item.id, QUEUE_STATUS.IN_PROGRESS)}
+                          onClick={() => updateQueueStatus(item.id, QUEUE_STATUS.IN_PROGRESS)}
                           className="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-primary-dark transition-all"
                         >
                           Call
                         </button>
                         <button
-                          onClick={() => updateStatus(item.id, QUEUE_STATUS.SKIPPED)}
+                          onClick={() => updateQueueStatus(item.id, QUEUE_STATUS.SKIPPED)}
                           className="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-slate-200 transition-all"
                         >
                           Skip
@@ -197,7 +185,7 @@ const QueueManagement = () => {
                     )}
                     {item.status === QUEUE_STATUS.IN_PROGRESS && (
                       <button
-                        onClick={() => updateStatus(item.id, QUEUE_STATUS.COMPLETED)}
+                        onClick={() => updateQueueStatus(item.id, QUEUE_STATUS.COMPLETED)}
                         className="bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-emerald-600 transition-all"
                       >
                         Complete

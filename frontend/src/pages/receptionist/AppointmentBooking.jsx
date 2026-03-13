@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../../config/firebase';
-import { APPT_STATUS } from '../../config/constants';
+import { bookAppointment } from '../../services/appointmentService';
 import { triggerWebhook } from '../../services/webhookService';
+import { APPT_STATUS } from '../../config/constants';
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -51,14 +50,12 @@ const AppointmentBooking = () => {
     setError('');
     try {
       const date = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
-      await addDoc(collection(db, 'appointments'), {
+      await bookAppointment({
         patientName: form.name,
         phone:       form.phone,
         reason:      form.reason,
         date,
         time:        selectedSlot,
-        status:      APPT_STATUS.SCHEDULED,
-        createdAt:   serverTimestamp(),
       });
       await triggerWebhook('appointment.booked', {
         patientName: form.name,
